@@ -1,9 +1,22 @@
+---
+name: Clean Validation Environments
+
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: The environment to run this workflow in
+        type: environment
+        default: Dev
+        required: true
 
 
 jobs:
   clean:
     name: Clean
     runs-on: ubuntu-latest
+    if: |
+      github.ref != 'refs/heads/main'
     environment: Dev
     timeout-minutes: 30
     steps:

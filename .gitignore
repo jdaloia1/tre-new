@@ -420,4 +420,7 @@ FodyWeavers.xsd
 # Local .terraform directories
 **/.terraform/*
 
+
 letsencrypt/
+index.html
+validation.txt

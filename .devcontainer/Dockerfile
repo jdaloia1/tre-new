@@ -73,6 +73,12 @@ ARG YQ_VERSION="v4.33.3"
 RUN curl -L --fail -o /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
     && chmod +x /usr/local/bin/yq
 
+# Install AzCopy
+RUN curl -L --fail -o /tmp/azcopy.tar.gz "https://aka.ms/downloadazcopy-v10-linux" \
+  && tar -xvzf /tmp/azcopy.tar.gz -C /tmp \
+  && cp /tmp/azcopy_linux_amd64_*/azcopy /usr/local/bin/azcopy \
+  && chmod +x /usr/local/bin/azcopy
+
 ARG PAJV_VERSION="1.2.0"
 RUN npm install -g pajv@${PAJV_VERSION}
 
@@ -80,6 +86,10 @@ RUN npm install -g pajv@${PAJV_VERSION}
 RUN if [ "${INTERACTIVE}" = "false" ]; then \
 apt-get update && apt-get install --no-install-recommends -y git \
 && apt-get clean -y && rm -rf /var/lib/apt/lists/* ; fi
+
+# Override pip version
+ARG PIP_VERSION=24.2  # Override pip version
+RUN pip3 --no-cache-dir install pip==${PIP_VERSION} && pip3 config set global.disable-pip-version-check true
 
 USER $USERNAME
 
